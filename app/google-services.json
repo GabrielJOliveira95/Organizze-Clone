@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "849320997723",
+    "firebase_url": "https://meus-gastos-23b67.firebaseio.com",
+    "project_id": "meus-gastos-23b67",
+    "storage_bucket": "meus-gastos-23b67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849320997723:android:a606a9b388bba46af4607e",
+        "android_client_info": {
+          "package_name": "com.android.oliveiragabriel.meusgastos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849320997723-dhb8s9kfe2andqsjr303v7hn2vhokvsb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.oliveiragabriel.meusgastos",
+            "certificate_hash": "86e2c0fd62a5437cbc7065c138a6f7491a1d5cc8"
+          }
+        },
+        {
+          "client_id": "849320997723-d0og0t1hgdcmns7bvrt6q9rthd5bdhku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPIX8LHdd64vIZct4HKTG7XpEOWiR8X30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849320997723-d0og0t1hgdcmns7bvrt6q9rthd5bdhku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
