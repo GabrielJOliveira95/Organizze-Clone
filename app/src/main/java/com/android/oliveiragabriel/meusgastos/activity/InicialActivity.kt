@@ -20,18 +20,6 @@ class InicialActivity : AppCompatActivity() {
         setContentView(R.layout.activity_inicial)
         setSupportActionBar(toolbar)
 
-
-        inserir.setOnClickListener{
-
-            val base = FirebaseDatabase.getInstance().reference
-            val user = NewUser()
-            user.nome = "Gabriel"
-            user.email = "gasgsdhgsdhgsudhgusd"
-            user.id = "dsgsdgsd"
-            base.child("usuario").child("001").setValue(user)
-
-        }
-
         fab_despesas.setOnClickListener {
             goDespesasActivity()
         }
