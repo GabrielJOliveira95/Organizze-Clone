@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.oliveiragabriel.meusgastos.R
-import com.android.oliveiragabriel.meusgastos.model.FireBaseAuth
+import com.android.oliveiragabriel.meusgastos.model.Base64Converter
+import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
 import com.android.oliveiragabriel.meusgastos.model.NewUser
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -75,7 +76,7 @@ class CadastroActivity : AppCompatActivity() {
             user.nome = nome
             user.email = email
             user.passaword = senha
-            val cadastrar = FireBaseAuth.getFirebase()
+            val cadastrar = FireBaseSetting.getFirebaseAuth()
 
             cadastrar?.createUserWithEmailAndPassword(user.email!!, user.passaword!!)
                 ?.addOnCompleteListener {
@@ -83,6 +84,9 @@ class CadastroActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         firebaserUser = cadastrar.currentUser!!
                         Toast.makeText(this, "sucesso", Toast.LENGTH_LONG).show()
+                        val idCodificado = Base64Converter.codificarBase(user.email!!)
+                        user.id = idCodificado
+                        user.salvarNewUser()
                         acessarTelaInicial()
                     } else {
                         try {
@@ -105,8 +109,8 @@ class CadastroActivity : AppCompatActivity() {
         }
     }
 
-    fun acessarTelaInicial(){
-        if(firebaserUser != null){
+    fun acessarTelaInicial() {
+        if (firebaserUser != null) {
             startActivity(Intent(this, InicialActivity::class.java))
         }
     }

@@ -3,13 +3,11 @@ package com.android.oliveiragabriel.meusgastos.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.Toast
 import com.android.oliveiragabriel.meusgastos.R
-import com.android.oliveiragabriel.meusgastos.model.FireBaseAuth
+import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
 import com.heinrichreimersoftware.materialintro.app.IntroActivity
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide
-import kotlinx.android.synthetic.main.activity_logar.*
 
 class MainActivity : IntroActivity() {
 
@@ -77,7 +75,7 @@ class MainActivity : IntroActivity() {
 
     fun manterLogado(){
 
-        val fireBaseAuth = FireBaseAuth.getFirebase()
+        val fireBaseAuth = FireBaseSetting.getFirebaseAuth()
         val user = fireBaseAuth?.currentUser
 
         if (user != null){

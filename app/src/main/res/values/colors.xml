@@ -3,4 +3,13 @@
     <color name="colorPrimary">#01C7D2</color>
     <color name="colorPrimaryDark">#00B2BC</color>
     <color name="colorAccent">#FF706A</color>
+    
+    <color name="colorPrimaryReceitas">#00D39E</color>
+    <color name="colorPrimaryDarkReitas">#00BE8B</color>
+    <color name="colorAccentReceitas">#00D39E</color>
+
+
+    <color name="colorPrimaryDespesas">#FF706A</color>
+    <color name="colorPrimaryDarkDespesas">#E66560</color>
+    <color name="colorAccentDespesas">#FF706A</color>
 </resources>

@@ -1,14 +1,11 @@
 package com.android.oliveiragabriel.meusgastos.activity
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.android.oliveiragabriel.meusgastos.R
-import com.android.oliveiragabriel.meusgastos.model.FireBaseAuth
+import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
 import com.android.oliveiragabriel.meusgastos.model.NewUser
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -66,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
             user.email = email
             user.passaword = senha
 
-            val autenticar = FireBaseAuth.getFirebase()
+            val autenticar = FireBaseSetting.getFirebaseAuth()
             autenticar?.signInWithEmailAndPassword(user.email!!, user.passaword!!)?.addOnCompleteListener{
                 if (it.isSuccessful){
                     Toast.makeText(this, "Logado", Toast.LENGTH_LONG).show()
@@ -92,7 +89,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun acessarTelaInicial(){
-        val fireBaseAuth = FireBaseAuth.getFirebase()
+        val fireBaseAuth = FireBaseSetting.getFirebaseAuth()
         val user = fireBaseAuth?.currentUser
         if (user != null){
             startActivity(Intent(this, InicialActivity::class.java))

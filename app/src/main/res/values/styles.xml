@@ -7,6 +7,19 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="ReceitaTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryReceitas</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkReitas</item>
+        <item name="colorAccent">@color/colorAccentReceitas</item>
+    </style>
+
+
+    <style name="DespesaTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDespesas</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkDespesas</item>
+        <item name="colorAccent">@color/colorAccentDespesas</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
