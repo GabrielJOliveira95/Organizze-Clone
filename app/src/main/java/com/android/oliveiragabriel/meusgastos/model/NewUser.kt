@@ -7,7 +7,7 @@ class NewUser (@get:Exclude var id: String? = null, var nome: String? = null, va
 
     fun salvarNewUser(){
         val dataBase = FireBaseSetting.getFirebaseDataBase()
-        val id = this.id.toString()
+        val id = this.id.toString().replace("\n", "")
         dataBase?.child("users")?.child(id)?.setValue(this)
     }
 }
