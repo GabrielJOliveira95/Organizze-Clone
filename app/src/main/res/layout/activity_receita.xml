@@ -7,14 +7,14 @@
     tools:context=".activity.ReceitaActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout6"
+        android:id="@+id/editLayoutDataDespesas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+        app:layout_constraintBottom_toTopOf="@+id/editLayoutCategoriaDespesas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,11 +26,12 @@
             android:id="@+id/editTexDataReceita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Data" />
+            android:hint="Data"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout5"
+        android:id="@+id/editLayoutCategoriaDespesas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -39,20 +40,21 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout7"
+        app:layout_constraintBottom_toTopOf="@+id/editLayoutDescricaoDespesas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutDataDespesas">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTexCategoriaReceita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Categoria" />
+            android:hint="Categoria"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout7"
+        android:id="@+id/editLayoutDescricaoDespesas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -62,13 +64,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutCategoriaDespesas">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTexDescricaoReceita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Descrição" />
+            android:hint="Descrição"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
@@ -83,10 +86,24 @@
         android:paddingTop="30dp"
         android:paddingRight="16dp"
         android:paddingBottom="30dp"
+        android:singleLine="true"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorAccentReceitas"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/mi_ic_finish" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

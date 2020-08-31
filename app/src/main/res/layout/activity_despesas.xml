@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
     tools:context=".activity.DespesasActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout6"
+        android:id="@+id/editLayoutDataDespesas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -15,7 +16,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+        app:layout_constraintBottom_toTopOf="@+id/editLayoutCategoriaDespesas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextValorDespesas"
@@ -26,11 +27,14 @@
             android:id="@+id/editTextDataDespesas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Data" />
+            android:hint="Data"
+            android:inputType="date"
+            android:singleLine="true"
+            android:textAllCaps="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout5"
+        android:id="@+id/editLayoutCategoriaDespesas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -38,20 +42,22 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout7"
+        app:layout_constraintBottom_toTopOf="@+id/editLayoutDescricaoDespesas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutDataDespesas">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextCategoriaDespesas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Categoria" />
+            android:hint="Categoria"
+            android:inputType="textCapWords"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout7"
+        android:id="@+id/editLayoutDescricaoDespesas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -61,13 +67,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutCategoriaDespesas">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTexDescricaoDespesas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Descrição" />
+            android:hint="Descrição"
+            android:inputType="textCapWords"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
@@ -82,26 +90,34 @@
         android:paddingTop="30dp"
         android:paddingRight="16dp"
         android:paddingBottom="30dp"
+        android:singleLine="true"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/salvarDespesas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginLeft="161dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginRight="162dp"
         android:layout_marginBottom="16dp"
-        android:text="Salvar"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+        app:srcCompat="@drawable/mi_ic_finish" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutDescricaoDespesas"
+        app:srcCompat="@drawable/debtlogo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
