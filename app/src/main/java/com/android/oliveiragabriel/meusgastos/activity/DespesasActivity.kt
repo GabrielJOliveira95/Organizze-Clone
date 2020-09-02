@@ -3,17 +3,22 @@ package com.android.oliveiragabriel.meusgastos.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.android.oliveiragabriel.meusgastos.R
-import com.android.oliveiragabriel.meusgastos.model.MyData
-import com.android.oliveiragabriel.meusgastos.model.NewDespesas
+import com.android.oliveiragabriel.meusgastos.model.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_cadastrar.*
 import kotlinx.android.synthetic.main.activity_despesas.*
 
 class DespesasActivity : AppCompatActivity() {
+    private var despesaTotal = 0.0
+    private var despesaAtual = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_despesas)
 
         editTextDataDespesas.setText(MyData.dataAtual())
+        recuperarDespesa()
 
         salvarDespesas.setOnClickListener {
             salvarDespesas()
@@ -25,15 +30,44 @@ class DespesasActivity : AppCompatActivity() {
     fun salvarDespesas() {
 
         if (validarCamposSalvarDespesas()) {
-
             val despesas = NewDespesas()
-            val despesasFloat = editTextDataDespesas.text.toString()
-            despesas.valor = despesasFloat.toDouble()
+
+            val despesaDigitada = editTextValorDespesas.text.toString()
+            despesaAtual = despesaDigitada.toDoubleOrNull()!!
+            despesas.valor = despesaTotal + despesaAtual
             despesas.dataDespesa = editTextDataDespesas.text.toString()
             despesas.categoria = editTextCategoriaDespesas.text.toString()
             despesas.descricao = editTexDescricaoDespesas.text.toString()
+
+            atualizarDespesas(despesas.valor!!)
             despesas.salvarNovaDespesa(this)
         }
+    }
+
+    fun atualizarDespesas(despesa: Double){
+        val databaseReference = FireBaseSetting.getFirebaseDataBase()
+        val auth = FireBaseSetting.getFirebaseAuth()
+        val email = auth?.currentUser?.email
+        val idUser = Base64Converter.codificarBase(email!!).replace("\n", "")
+        databaseReference?.child("users")?.child(idUser)?.child("despesas")?.setValue(despesa)
+    }
+
+    fun recuperarDespesa(){
+
+        val databaseReference = FireBaseSetting.getFirebaseDataBase()
+        val auth = FireBaseSetting.getFirebaseAuth()
+        val email = auth?.currentUser?.email
+        val userId = Base64Converter.codificarBase(email!!)
+
+        databaseReference?.child("users")?.child(userId)?.addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(NewUser::class.java)
+                despesaTotal = user?.despesas!!
+            }
+        })
     }
 
     fun validarCamposSalvarDespesas(): Boolean {
