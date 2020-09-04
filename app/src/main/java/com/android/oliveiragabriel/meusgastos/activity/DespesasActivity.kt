@@ -7,7 +7,6 @@ import com.android.oliveiragabriel.meusgastos.model.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_cadastrar.*
 import kotlinx.android.synthetic.main.activity_despesas.*
 
 class DespesasActivity : AppCompatActivity() {
@@ -26,16 +25,60 @@ class DespesasActivity : AppCompatActivity() {
 
     }
 
+    fun validarCamposSalvarDespesas(): Boolean {
+
+        val campoValidado: Boolean
+
+        when {
+            editTextValorDespesas.text.toString().isEmpty() -> {
+                editLayoutDataDespesa.isErrorEnabled = false
+                editLayoutDescricaoDespesas.isErrorEnabled = false
+
+                editTextValorDespesas.error = "Digite o valor da despesa"
+                campoValidado = false
+            }
+            editTextDataDespesas.text.toString().isEmpty() -> {
+
+                editLayoutDataDespesa.isErrorEnabled
+                editLayoutDataDespesa.error = "Digite a data"
+                campoValidado = false
+            }
+            editTextCategoriaDespesas.text.toString().isEmpty() -> {
+                editLayoutDataDespesa.isErrorEnabled = false
+
+                editLayoutCategoriaDespesas.isErrorEnabled
+                editLayoutCategoriaDespesas.error = "Digite a categoria"
+                campoValidado = false
+            }
+            editTexDescricaoDespesas.text.toString().isEmpty() -> {
+                editLayoutCategoriaDespesas.isErrorEnabled = false
+
+                editLayoutDescricaoDespesas.isErrorEnabled
+                editLayoutDescricaoDespesas.error = "Digite a descriçao"
+                campoValidado = false
+            }
+            else -> {
+                editLayoutDataDespesa.isErrorEnabled = false
+                editLayoutCategoriaDespesas.isErrorEnabled = false
+                editLayoutDescricaoDespesas.isErrorEnabled = false
+                campoValidado = true
+
+            }
+        }
+        return campoValidado
+
+    }
+
 
     fun salvarDespesas() {
 
         if (validarCamposSalvarDespesas()) {
-            val despesas = NewDespesas()
+            val despesas = Movimentacoes()
 
             val despesaDigitada = editTextValorDespesas.text.toString()
             despesaAtual = despesaDigitada.toDoubleOrNull()!!
             despesas.valor = despesaTotal + despesaAtual
-            despesas.dataDespesa = editTextDataDespesas.text.toString()
+            despesas.data = editTextDataDespesas.text.toString()
             despesas.categoria = editTextCategoriaDespesas.text.toString()
             despesas.descricao = editTexDescricaoDespesas.text.toString()
 
@@ -70,47 +113,5 @@ class DespesasActivity : AppCompatActivity() {
         })
     }
 
-    fun validarCamposSalvarDespesas(): Boolean {
 
-        val campoValidado: Boolean
-
-        when {
-            editTextValorDespesas.text.toString().isEmpty() -> {
-                editLayoutDataDespesas.isErrorEnabled = false
-                editLayoutDescricaoDespesas.isErrorEnabled = false
-
-                editTextValorDespesas.error = "Digite o valor da despesa"
-                campoValidado = false
-            }
-            editTextDataDespesas.text.toString().isEmpty() -> {
-
-                editLayoutDataDespesas.isErrorEnabled
-                editLayoutDataDespesas.error = "Digite a data"
-                campoValidado = false
-            }
-            editTextCategoriaDespesas.text.toString().isEmpty() -> {
-                editLayoutDataDespesas.isErrorEnabled = false
-
-                editLayoutCategoriaDespesas.isErrorEnabled
-                editLayoutCategoriaDespesas.error = "Digite a categoria"
-                campoValidado = false
-            }
-            editTexDescricaoDespesas.text.toString().isEmpty() -> {
-                editLayoutCategoriaDespesas.isErrorEnabled = false
-
-                editLayoutDescricaoDespesas.isErrorEnabled
-                editLayoutDescricaoDespesas.error = "Digite a descriçao"
-                campoValidado = false
-            }
-            else -> {
-                editLayoutDataDespesas.isErrorEnabled = false
-                editLayoutCategoriaDespesas.isErrorEnabled = false
-                editLayoutDescricaoDespesas.isErrorEnabled = false
-                campoValidado = true
-
-            }
-        }
-        return campoValidado
-
-    }
 }

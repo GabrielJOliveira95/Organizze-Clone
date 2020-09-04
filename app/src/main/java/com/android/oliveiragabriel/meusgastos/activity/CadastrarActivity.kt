@@ -21,6 +21,8 @@ class CadastroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastrar)
 
+        supportActionBar?.title = getString(R.string.cadastrar)
+
         btn_cadastrar_user.setOnClickListener {
             cadastrarUser()
         }

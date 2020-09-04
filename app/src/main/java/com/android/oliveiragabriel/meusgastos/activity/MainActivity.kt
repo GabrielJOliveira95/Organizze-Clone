@@ -1,19 +1,26 @@
 package com.android.oliveiragabriel.meusgastos.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.Toolbar
 import com.android.oliveiragabriel.meusgastos.R
 import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
 import com.heinrichreimersoftware.materialintro.app.IntroActivity
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide
+import kotlinx.android.synthetic.main.activity_inicial.*
 
 class MainActivity : IntroActivity() {
 
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // setContentView(R.layout.activity_main)
+
 
         manterLogado()
         addSlide()

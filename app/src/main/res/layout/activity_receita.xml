@@ -7,20 +7,19 @@
     tools:context=".activity.ReceitaActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editLayoutDataDespesas"
+        android:id="@+id/editLayoutDataReceita"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/editLayoutCategoriaDespesas"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/editLayoutCategoriaReceita"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTexValorReceita"
-        app:layout_constraintVertical_bias="0.07999998"
-        app:layout_constraintVertical_chainStyle="packed">
+        app:layout_constraintTop_toBottomOf="@+id/editTextValorReceita">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTexDataReceita"
@@ -31,51 +30,52 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editLayoutCategoriaDespesas"
+        android:id="@+id/editLayoutCategoriaReceita"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/editLayoutDescricaoDespesas"
+        app:layout_constraintBottom_toTopOf="@+id/editLayoutDescricaoReceita"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editLayoutDataDespesas">
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutDataReceita">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTexCategoriaReceita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Categoria"
+            android:inputType="textCapWords"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editLayoutDescricaoDespesas"
+        android:id="@+id/editLayoutDescricaoReceita"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editLayoutCategoriaDespesas">
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutCategoriaReceita">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTexDescricaoReceita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descrição"
+            android:inputType="textCapWords"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
-        android:id="@+id/editTexValorReceita"
+        android:id="@+id/editTextValorReceita"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorAccentReceitas"
@@ -93,9 +93,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/fabReceita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="178dp"
+        android:layout_marginLeft="178dp"
+        android:layout_marginEnd="177dp"
+        android:layout_marginRight="177dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
         app:backgroundTint="@color/colorAccentReceitas"
@@ -109,11 +113,11 @@
         android:id="@+id/imageView3"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editLayoutDescricaoDespesas"
+        app:layout_constraintTop_toBottomOf="@+id/editLayoutDescricaoReceita"
         app:srcCompat="@drawable/walletlogo" />
 
 

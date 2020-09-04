@@ -17,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_logar)
 
+        supportActionBar?.title = getString(R.string.login)
         btn_logar_user.setOnClickListener{
             logarUser()
         }

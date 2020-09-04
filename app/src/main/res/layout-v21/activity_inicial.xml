@@ -17,12 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:title="Organizze"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_inicial" />
 
+    <include layout="@layout/content_inicial" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
