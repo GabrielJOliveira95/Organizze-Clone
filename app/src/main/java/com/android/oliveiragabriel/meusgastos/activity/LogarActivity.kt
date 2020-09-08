@@ -5,20 +5,25 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.oliveiragabriel.meusgastos.R
+import com.android.oliveiragabriel.meusgastos.model.Base64Converter
 import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
 import com.android.oliveiragabriel.meusgastos.model.NewUser
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_logar.*
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var nome: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_logar)
 
         supportActionBar?.title = getString(R.string.login)
-        btn_logar_user.setOnClickListener{
+        btn_logar_user.setOnClickListener {
             logarUser()
         }
     }
@@ -55,48 +60,64 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun logarUser(){
-         val email = textInputEmailLogar.text.toString()
-         val senha = textInputSenhaLogar.text.toString()
+    fun logarUser() {
+        val email = textInputEmailLogar.text.toString()
+        val senha = textInputSenhaLogar.text.toString()
 
-        if (validarCampoLogar()){
+        if (validarCampoLogar()) {
             val user = NewUser()
             user.email = email
             user.passaword = senha
 
             val autenticar = FireBaseSetting.getFirebaseAuth()
-            autenticar?.signInWithEmailAndPassword(user.email!!, user.passaword!!)?.addOnCompleteListener{
-                if (it.isSuccessful){
-                    Toast.makeText(this, "Logado", Toast.LENGTH_LONG).show()
-                    acessarTelaInicial()
+            autenticar?.signInWithEmailAndPassword(user.email!!, user.passaword!!)
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        acessarTelaInicial()
 
-                }else{
+                    } else {
 
-                    try {
-                        throw it.exception!!
-                    }catch (e: FirebaseAuthInvalidCredentialsException){
-                        textInputLayoutEmailLogar.isErrorEnabled
-                        textInputLayoutSenhaLogar.isErrorEnabled
-                        textInputLayoutEmailLogar.error = "E-mail ou senha inválido(s)"
-                        textInputLayoutSenhaLogar.error = "E-mail ou senha inválido(s)"
-                    }catch (e: FirebaseAuthInvalidUserException){
-                        textInputLayoutEmailLogar.isErrorEnabled
-                        textInputLayoutEmailLogar.error = "Usuário não cadastrado"
+                        try {
+                            throw it.exception!!
+                        } catch (e: FirebaseAuthInvalidCredentialsException) {
+                            textInputLayoutEmailLogar.isErrorEnabled
+                            textInputLayoutSenhaLogar.isErrorEnabled
+                            textInputLayoutEmailLogar.error = "E-mail ou senha inválido(s)"
+                            textInputLayoutSenhaLogar.error = "E-mail ou senha inválido(s)"
+                        } catch (e: FirebaseAuthInvalidUserException) {
+                            textInputLayoutEmailLogar.isErrorEnabled
+                            textInputLayoutEmailLogar.error = "Usuário não cadastrado"
+                        }
+
                     }
-
                 }
+        }
+    }
+
+    fun acessarTelaInicial() {
+        val dataBase = FireBaseSetting.getFirebaseDataBase()
+        val auth = FireBaseSetting.getFirebaseAuth()
+        val email = auth?.currentUser?.email
+        val idUser = Base64Converter.codificarBase(email.toString()).replace("\n", "")
+
+        dataBase?.child("users")?.child(idUser)?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(NewUser::class.java)
+                Toast.makeText(
+                    applicationContext,
+                    "Bem vindo de volta ${user?.nome}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-        }
-    }
 
-    fun acessarTelaInicial(){
-        val fireBaseAuth = FireBaseSetting.getFirebaseAuth()
-        val user = fireBaseAuth?.currentUser
-        if (user != null){
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+        if (auth != null) {
             startActivity(Intent(this, InicialActivity::class.java))
+
         }
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -104,5 +125,5 @@ class LoginActivity : AppCompatActivity() {
         textInputEmailLogar.setText("")
 
     }
-    
+
 }

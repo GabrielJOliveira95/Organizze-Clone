@@ -72,12 +72,12 @@ class MainActivity : IntroActivity() {
 
     fun cadastrar(view: View) {
         startActivity(Intent(this@MainActivity, CadastroActivity::class.java))
-        Toast.makeText(this@MainActivity, "Cadastrar", Toast.LENGTH_SHORT).show()
+
     }
 
     fun logar(view: View) {
         startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-        Toast.makeText(this@MainActivity, "Cadastrar", Toast.LENGTH_SHORT).show()
+
     }
 
     fun manterLogado(){

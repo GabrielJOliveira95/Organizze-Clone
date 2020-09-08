@@ -7,11 +7,13 @@ import com.android.oliveiragabriel.meusgastos.model.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.activity_despesas.*
 import kotlinx.android.synthetic.main.activity_receita.*
 
 class ReceitaActivity : AppCompatActivity() {
-    private var receitaAtual: Double = 0.0
-    private var receitaTotal: Double? = 0.0
+    private var receitaRecuperadaEditText = 0.0
+    private var receitaFirebase = 0.0
+    private var despesaTotal = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receita)
@@ -72,15 +74,17 @@ class ReceitaActivity : AppCompatActivity() {
 
         if (validarCamposSalvarReceita()) {
             val receita = Movimentacoes()
-            val despesaDigitada = editTextValorReceita.text.toString()
-            receitaAtual = despesaDigitada.toDoubleOrNull()!!
-            receita.valor = receitaAtual + receitaTotal!!
+            receita.tipo = "credito"
+            receitaRecuperadaEditText = (editTextValorReceita.text.toString()).toDouble()
+            receita.valor = receitaRecuperadaEditText
             receita.data = editTexDataReceita.text.toString()
             receita.categoria = editTexCategoriaReceita.text.toString()
             receita.descricao = editTexDescricaoReceita.text.toString()
 
-            receita.salvarNovaReceita(applicationContext)
-            atualizarReceita(receita.valor!!)
+            despesaTotal = receitaRecuperadaEditText + receitaFirebase
+            receita.salvar(this)
+            atualizarReceita(despesaTotal)
+            finish()
         }
     }
 
@@ -91,23 +95,19 @@ class ReceitaActivity : AppCompatActivity() {
         val email = auth?.currentUser?.email
         val idUser = Base64Converter.codificarBase(email.toString()).replace("\n", "")
 
-        dataBase?.child("receita")?.child(idUser)?.addValueEventListener(object : ValueEventListener {
+        dataBase?.child("users")?.child(idUser)?.addValueEventListener(object : ValueEventListener {
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(NewUser::class.java)
-                    receitaTotal = user?.entradaDinheiro
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-
-            })
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(NewUser::class.java)
+                receitaFirebase = user?.entradaDinheiro!!
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
 
     }
 
-    fun atualizarReceita(valor: Double){
+    fun atualizarReceita(valor: Double) {
         val dataBase = FireBaseSetting.getFirebaseDataBase()
         val auth = FireBaseSetting.getFirebaseAuth()
         val email = auth?.currentUser?.email
@@ -116,3 +116,7 @@ class ReceitaActivity : AppCompatActivity() {
         dataBase?.child("users")?.child(idUser)?.child("entradaDinheiro")?.setValue(valor)
     }
 }
+
+
+
+

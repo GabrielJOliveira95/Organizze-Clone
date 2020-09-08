@@ -86,7 +86,7 @@
         android:background="@color/colorAccentDespesas"
         android:ems="10"
         android:gravity="right"
-        android:hint="00,00"
+        android:hint="@string/rs"
         android:inputType="numberDecimal"
         android:paddingTop="30dp"
         android:paddingRight="16dp"

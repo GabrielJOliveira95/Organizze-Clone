@@ -4,7 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
     tools:context=".activity.ReceitaActivity">
+
+    <EditText
+        android:id="@+id/editTextValorReceita"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccentReceitas"
+        android:ems="10"
+        android:gravity="right"
+        android:hint="@string/rs"
+        android:inputType="numberDecimal"
+        android:paddingTop="30dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="30dp"
+        android:singleLine="true"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editLayoutDataReceita"
@@ -27,6 +46,7 @@
             android:layout_height="wrap_content"
             android:hint="Data"
             android:singleLine="true" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -73,24 +93,6 @@
             android:inputType="textCapWords"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <EditText
-        android:id="@+id/editTextValorReceita"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccentReceitas"
-        android:ems="10"
-        android:gravity="right"
-        android:hint="00,00"
-        android:inputType="numberDecimal"
-        android:paddingTop="30dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="30dp"
-        android:singleLine="true"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabReceita"

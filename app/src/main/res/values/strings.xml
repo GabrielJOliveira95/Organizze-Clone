@@ -5,4 +5,5 @@
     <string name="despesas">Despesas</string>
     <string name="cadastrar">Cadastrar</string>
     <string name="login">Efetuar Login</string>
+    <string name="rs">R$ 00,00</string>
 </resources>

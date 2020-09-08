@@ -2,6 +2,7 @@ package com.android.oliveiragabriel.meusgastos.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.android.oliveiragabriel.meusgastos.R
 import com.android.oliveiragabriel.meusgastos.model.*
 import com.google.firebase.database.DataSnapshot
@@ -10,15 +11,14 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_despesas.*
 
 class DespesasActivity : AppCompatActivity() {
+    private var despesaRecuperadaEditText = 0.0
+    private var despesaFirebase = 0.0
     private var despesaTotal = 0.0
-    private var despesaAtual = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_despesas)
-
         editTextDataDespesas.setText(MyData.dataAtual())
         recuperarDespesa()
-
         salvarDespesas.setOnClickListener {
             salvarDespesas()
         }
@@ -74,16 +74,17 @@ class DespesasActivity : AppCompatActivity() {
 
         if (validarCamposSalvarDespesas()) {
             val despesas = Movimentacoes()
-
-            val despesaDigitada = editTextValorDespesas.text.toString()
-            despesaAtual = despesaDigitada.toDoubleOrNull()!!
-            despesas.valor = despesaTotal + despesaAtual
+            despesas.tipo = "gastos"
+            despesaRecuperadaEditText = (editTextValorDespesas.text.toString()).toDouble()
+            despesas.valor = despesaRecuperadaEditText
             despesas.data = editTextDataDespesas.text.toString()
             despesas.categoria = editTextCategoriaDespesas.text.toString()
             despesas.descricao = editTexDescricaoDespesas.text.toString()
 
-            atualizarDespesas(despesas.valor!!)
-            despesas.salvarNovaDespesa(this)
+            despesaTotal = despesaRecuperadaEditText + despesaFirebase
+            despesas.salvar(this)
+            atualizarDespesas(despesaTotal)
+            finish()
         }
     }
 
@@ -100,7 +101,7 @@ class DespesasActivity : AppCompatActivity() {
         val databaseReference = FireBaseSetting.getFirebaseDataBase()
         val auth = FireBaseSetting.getFirebaseAuth()
         val email = auth?.currentUser?.email
-        val userId = Base64Converter.codificarBase(email!!)
+        val userId = Base64Converter.codificarBase(email!!).replace("\n", "")
 
         databaseReference?.child("users")?.child(userId)?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -108,7 +109,9 @@ class DespesasActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(NewUser::class.java)
-                despesaTotal = user?.despesas!!
+                despesaFirebase = user?.despesas!!
+
+                Log.i("DESPESA", "Despesa $despesaFirebase")
             }
         })
     }
