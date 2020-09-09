@@ -105,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
                 val user = snapshot.getValue(NewUser::class.java)
                 Toast.makeText(
                     applicationContext,
-                    "Bem vindo de volta ${user?.nome}",
+                    "Bem-vindo de volta, ${user?.nome!!.split(" ")[0]}",
                     Toast.LENGTH_LONG
                 ).show()
             }

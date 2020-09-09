@@ -3,6 +3,7 @@ package com.android.oliveiragabriel.meusgastos.activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.sax.EndElementListener
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -10,7 +11,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.oliveiragabriel.meusgastos.R
 import com.android.oliveiragabriel.meusgastos.adapter.AdapterRecyclerView
 import com.android.oliveiragabriel.meusgastos.model.Base64Converter
@@ -39,6 +43,7 @@ class InicialActivity : AppCompatActivity() {
         setContentView(R.layout.activity_inicial)
         setSupportActionBar(toolbar)
 
+        mySwipe()
         myRecyclerView()
 
         fab_despesas.setOnClickListener {
@@ -61,6 +66,30 @@ class InicialActivity : AppCompatActivity() {
         recyclerview.layoutManager =
             LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         recyclerview.setHasFixedSize(true)
+    }
+
+    fun mySwipe(){
+
+        val itemTouchHelperCallback =
+            object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                }
+
+            }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerview)
     }
 
     fun progressBar() {
