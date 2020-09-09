@@ -82,7 +82,7 @@ class ReceitaActivity : AppCompatActivity() {
             receita.descricao = editTexDescricaoReceita.text.toString()
 
             despesaTotal = receitaRecuperadaEditText + receitaFirebase
-            receita.salvar(this)
+            receita.salvar(this, editTexDataReceita.text.toString())
             atualizarReceita(despesaTotal)
             finish()
         }

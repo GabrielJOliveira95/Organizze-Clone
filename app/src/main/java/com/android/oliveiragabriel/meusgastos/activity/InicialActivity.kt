@@ -2,38 +2,44 @@ package com.android.oliveiragabriel.meusgastos.activity
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.CalendarView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.oliveiragabriel.meusgastos.R
+import com.android.oliveiragabriel.meusgastos.adapter.AdapterRecyclerView
 import com.android.oliveiragabriel.meusgastos.model.Base64Converter
 import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
+import com.android.oliveiragabriel.meusgastos.model.Movimentacoes
 import com.android.oliveiragabriel.meusgastos.model.NewUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.android.synthetic.main.activity_inicial.*
 import kotlinx.android.synthetic.main.content_inicial.*
 import java.text.DecimalFormat
-import java.text.NumberFormat
 
 class InicialActivity : AppCompatActivity() {
 
     var saldoTotal = 0.0
+    lateinit var eventListener: ValueEventListener
+    lateinit var database: DatabaseReference
+    var mesano = ""
+    val listofMovimentacoes = mutableListOf<Movimentacoes>()
+    lateinit var adapter: AdapterRecyclerView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicial)
         setSupportActionBar(toolbar)
+
+        myRecyclerView()
 
         fab_despesas.setOnClickListener {
             goDespesasActivity()
@@ -43,14 +49,19 @@ class InicialActivity : AppCompatActivity() {
             goReceitasActivity()
         }
 
+        progressBar()
         calendarSetting()
 
-        recuperarDadosUser()
-
-        progressBar()
 
     }
 
+    fun myRecyclerView() {
+        adapter = AdapterRecyclerView(listofMovimentacoes, this)
+        recyclerview.adapter = adapter
+        recyclerview.layoutManager =
+            LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        recyclerview.setHasFixedSize(true)
+    }
 
     fun progressBar() {
         if (nomeInicial.text == "") {
@@ -102,36 +113,79 @@ class InicialActivity : AppCompatActivity() {
         )
         calendarView.setTitleMonths(meses)
         calendarView.setWeekDayLabels(dias)
+        val mes = calendarView.currentDate.month + 1
+        val mesf = String.format("%02d", mes)
+        val calendarAno = calendarView.currentDate.year
+        mesano = "$mesf$calendarAno"
 
         calendarView.setOnMonthChangedListener { _: MaterialCalendarView, calendarDay: CalendarDay ->
-            Log.i("DATA", "DATA ${calendarDay.day} ${calendarDay.month + 1} ${calendarDay.year}")
+            val mes = calendarDay.month + 1
+            val mesf = String.format("%02d", mes)
+            mesano = "$mesf${calendarDay.year}"
+            recuperarTransacoes()
         }
     }
 
+    fun recuperarTransacoes() {
+        val databaseReference = FireBaseSetting.getFirebaseDataBase()
+        val auth = FireBaseSetting.getFirebaseAuth()
+        val email = auth?.currentUser?.email.toString()
+        val idUser = Base64Converter.codificarBase(email).replace("\n", "")
+        listofMovimentacoes.clear()
+        databaseReference?.child("movimentacoes")?.child(idUser)?.child(mesano)
+            ?.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (item in snapshot.children) {
+                        val movimentacoes: Movimentacoes =
+                            item.getValue(Movimentacoes::class.java)!!
+                        listofMovimentacoes.add(movimentacoes)
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.i("ERRO", "DETALHES ${error.details}")
+                    Log.i("ERRO", "ERRO ${error.message}")
+                }
+            })
+    }
+
     fun recuperarDadosUser() {
-        val database = FireBaseSetting.getFirebaseDataBase()
+        database = FireBaseSetting.getFirebaseDataBase()!!
         val auth = FireBaseSetting.getFirebaseAuth()
         val email = auth?.currentUser?.email
         val idUser = Base64Converter.codificarBase(email.toString()).replace("\n", "")
 
-        database?.child("users")?.child(idUser)?.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                Log.i("ERRO", error.message)
-                Log.i("ERRO", error.details)
-            }
+        eventListener = database.child("users").child(idUser)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Log.i("ERRO", error.message)
+                    Log.i("ERRO", error.details)
+                }
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user = snapshot.getValue(NewUser::class.java)
-                val numberFormat = DecimalFormat("00.00")
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(NewUser::class.java)
+                    val numberFormat = DecimalFormat("00.00")
 
-                nomeInicial.text = "Olá, ${user?.nome?.split(" ")?.get(0)}"
+                    nomeInicial.text = "Olá, ${user?.nome?.split(" ")?.get(0)}"
 
-                saldoTotal = user?.entradaDinheiro!! - user.despesas
-                val saldoTotalString = numberFormat.format(saldoTotal)
-                saldoInicial.text = "R$ $saldoTotalString"
-                progressBar()
-            }
-        })
+                    saldoTotal = user?.entradaDinheiro!! - user.despesas
+                    val saldoTotalString = numberFormat.format(saldoTotal)
+                    saldoInicial.text = "R$ $saldoTotalString"
+                    progressBar()
+                }
+            })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        recuperarDadosUser()
+        recuperarTransacoes()
+    }
+
+    override fun onStop() {
+        database.removeEventListener(eventListener)
+        super.onStop()
     }
 
     override fun onBackPressed() {

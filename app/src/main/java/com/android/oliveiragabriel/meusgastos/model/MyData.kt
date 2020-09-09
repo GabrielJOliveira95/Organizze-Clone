@@ -15,13 +15,13 @@ class MyData {
             return data
         }
 
-        fun mesAnoData(): String{
+        fun mesAnoData(mesAnoData: String): String{
 
-            val mesmAnoData = data?.split("/")
-            val dia = mesmAnoData?.get(0)
-            val ano = mesmAnoData?.get(1)
+            val mesmAnoData = mesAnoData.split("/")
+            val dia = mesmAnoData?.get(1)
+            val ano = mesmAnoData?.get(2)
 
-            return dia + ano
+            return "$dia$ano"
         }
     }
 }

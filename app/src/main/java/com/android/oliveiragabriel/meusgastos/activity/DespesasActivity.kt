@@ -82,7 +82,7 @@ class DespesasActivity : AppCompatActivity() {
             despesas.descricao = editTexDescricaoDespesas.text.toString()
 
             despesaTotal = despesaRecuperadaEditText + despesaFirebase
-            despesas.salvar(this)
+            despesas.salvar(this, editTextDataDespesas.text.toString())
             atualizarDespesas(despesaTotal)
             finish()
         }

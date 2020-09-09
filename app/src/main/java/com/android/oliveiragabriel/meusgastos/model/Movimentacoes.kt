@@ -12,28 +12,17 @@ class Movimentacoes(
 ) {
 
 
-    fun salvar(context: Context) {
+    fun salvar(context: Context, data: String?) {
         val dataBase = FireBaseSetting.getFirebaseDataBase()
         val auth = FireBaseSetting.getFirebaseAuth()
         val idUser = Base64Converter.codificarBase(auth?.currentUser?.email!!).replace("\n", "")
-        val mesAnoData = MyData.mesAnoData()
+        val mesAnoData = MyData.mesAnoData(data!!)
 
         dataBase?.child("movimentacoes")?.child(idUser)?.child(mesAnoData)?.push()?.setValue(this)
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Despesa Salva", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Concluído", Toast.LENGTH_LONG).show()
             }
 
     }
 
-    fun salvarNovaReceita(context: Context) {
-        val dataBase = FireBaseSetting.getFirebaseDataBase()
-        val auth = FireBaseSetting.getFirebaseAuth()
-        val idUser = Base64Converter.codificarBase(auth?.currentUser?.email!!).replace("\n", "")
-        val mesAnoData = MyData.mesAnoData()
-
-        dataBase?.child("movimentacoes")?.child(idUser)?.child(tipo.toString())?.child(mesAnoData)?.push()?.setValue(this)
-            ?.addOnSuccessListener {
-                Toast.makeText(context, "Despesa Salva", Toast.LENGTH_LONG).show()
-            }
-    }
 }
