@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.android.oliveiragabriel.meusgastos.R
 import com.android.oliveiragabriel.meusgastos.model.Movimentacoes
+import java.text.DecimalFormat
 
 class AdapterRecyclerView(mutableList: MutableList<Movimentacoes>, var context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -37,15 +38,18 @@ class AdapterRecyclerView(mutableList: MutableList<Movimentacoes>, var context: 
 
         if (holder is MyViewHolder){
 
-            holder.txt_valor.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-            if (lisfOfMovimentacoes[position].tipo.equals("gastos")){
-                holder.txt_valor.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                holder.txt_valor.text = "--"+lisfOfMovimentacoes[position].valor.toString()
-            }
-
+            val valorFormatado = DecimalFormat("00.00")
             holder.txt_titulo.text = lisfOfMovimentacoes[position].categoria
             holder.txt_descricao.text = lisfOfMovimentacoes[position].descricao.toString()
-            holder.txt_valor.text = lisfOfMovimentacoes[position].valor.toString()
+            holder.txt_valor.text = valorFormatado.format(lisfOfMovimentacoes[position].valor)
+            holder.txt_valor.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+
+            if (lisfOfMovimentacoes[position].tipo.equals("gastos")){
+                holder.txt_valor.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+                holder.txt_valor.text = "-${valorFormatado.format(lisfOfMovimentacoes[position].valor)}"
+            }
+
+
 
         }
     }
