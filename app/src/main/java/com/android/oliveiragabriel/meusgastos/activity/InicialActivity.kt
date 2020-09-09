@@ -83,7 +83,6 @@ class InicialActivity : AppCompatActivity() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
                 }
 
             }
@@ -106,6 +105,7 @@ class InicialActivity : AppCompatActivity() {
         alertDialog.setTitle("Sair")
         alertDialog.setMessage("Tem certeza de que deseja sair?")
         alertDialog.setNegativeButton("Não", null)
+        alertDialog.setIcon(R.drawable.ic_baseline_exit_to_app_24)
         alertDialog.setPositiveButton("Sim") { _: DialogInterface, _: Int ->
 
             val fireBaseAuth = FireBaseSetting.getFirebaseAuth()
