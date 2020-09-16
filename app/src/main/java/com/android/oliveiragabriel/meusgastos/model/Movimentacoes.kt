@@ -8,7 +8,9 @@ class Movimentacoes(
     var data: String? = null,
     var categoria: String? = null,
     var descricao: String? = null,
-    var tipo: String? = null
+    var tipo: String? = null,
+    var id: String? = null
+
 ) {
 
 
