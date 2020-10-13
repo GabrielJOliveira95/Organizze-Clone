@@ -7,13 +7,14 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.oliveiragabriel.meusgastos.R
-import com.android.oliveiragabriel.meusgastos.adapter.AdapterRecyclerView
+import com.android.oliveiragabriel.meusgastos.adapter.MyAdapterRecyclerView
 import com.android.oliveiragabriel.meusgastos.model.Base64Converter
 import com.android.oliveiragabriel.meusgastos.model.FireBaseSetting
 import com.android.oliveiragabriel.meusgastos.model.Movimentacoes
@@ -28,11 +29,13 @@ import java.text.DecimalFormat
 class InicialActivity : AppCompatActivity() {
 
     private var saldoTotal = 0.0
+    private var receitaTotal = 0.0
+    private var despesaTotal = 0.0
     private lateinit var eventListener: ValueEventListener
     private lateinit var database: DatabaseReference
     private var mesano = ""
     private val listOfMovimentacoes = mutableListOf<Movimentacoes>()
-    private lateinit var adapter: AdapterRecyclerView
+    private lateinit var myAdapter: MyAdapterRecyclerView
     private var movimentacoes = Movimentacoes()
 
 
@@ -42,6 +45,8 @@ class InicialActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         mySwipe()
+        progressBar()
+        calendarSetting()
         myRecyclerView()
 
         fab_despesas.setOnClickListener {
@@ -52,17 +57,17 @@ class InicialActivity : AppCompatActivity() {
             goReceitasActivity()
         }
 
-        progressBar()
-        calendarSetting()
+
+
+
 
 
     }
 
     fun myRecyclerView() {
-        adapter = AdapterRecyclerView(listOfMovimentacoes, this)
-        recyclerview.adapter = adapter
-        recyclerview.layoutManager =
-            LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        myAdapter = MyAdapterRecyclerView(listOfMovimentacoes, this)
+        recyclerview.adapter = myAdapter
+        recyclerview.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         recyclerview.setHasFixedSize(true)
     }
 
@@ -81,7 +86,7 @@ class InicialActivity : AppCompatActivity() {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     removerMovimentação(viewHolder)
-                    Log.i("ITEM MOVIDO", "ITEM MOVIDO")
+                    Log.i("ITEM MOVIDO", "${viewHolder.adapterPosition}")
                 }
 
             }
@@ -95,29 +100,26 @@ class InicialActivity : AppCompatActivity() {
         alertDialog.setTitle("Deletar")
         alertDialog.setMessage("Tem certeza de que deseja remover essa movimentação?")
         alertDialog.setCancelable(false)
+
         alertDialog.setPositiveButton("Sim") { _, _ ->
             val fireBase = FireBaseSetting.getFirebaseDataBase()
             val auth = FireBaseSetting.getFirebaseAuth()
             val email = auth?.currentUser?.email.toString()
             val idUser = Base64Converter.codificarBase(email).replace("\n", "")
+            val key = listOfMovimentacoes[viewHolder.adapterPosition].id
+            movimentacoes = listOfMovimentacoes[viewHolder.adapterPosition]
 
-            val position = viewHolder.adapterPosition
-            val key = movimentacoes.id
-            movimentacoes = listOfMovimentacoes[position]
+            fireBase?.child("movimentacoes")?.child(idUser)?.child(mesano)?.child (key!!)?.removeValue()
+            Log.i("Posição", "${viewHolder.adapterPosition}")
 
-
-            fireBase?.child("movimentacoes")?.child(idUser)?.child(mesano)?.child(key.toString())?.removeValue()
-
-            adapter.notifyItemRemoved(position)
-
-
+            atualizarSaldo()
 
         }
 
         alertDialog.setNegativeButton(
             "Não"
         ) { _, _ ->
-            adapter.notifyDataSetChanged()
+            myAdapter.notifyDataSetChanged()
         }
         alertDialog.create()
         alertDialog.show()
@@ -183,25 +185,46 @@ class InicialActivity : AppCompatActivity() {
             val mes = calendarDay.month + 1
             val mesf = String.format("%02d", mes)
             mesano = "$mesf${calendarDay.year}"
-            recuperarTransacoes()
+            listarTransacoes()
         }
     }
 
+    fun atualizarSaldo(){
 
-    fun recuperarTransacoes() {
+        with(movimentacoes.tipo){
+            if (this.equals("credito")){
+                saldoTotal = receitaTotal - movimentacoes.valor!!
+                val databaseReference = FireBaseSetting.getFirebaseDataBase()
+                val auth = FireBaseSetting.getFirebaseAuth()
+                val email = auth?.currentUser?.email.toString()
+                val idUser = Base64Converter.codificarBase(email).replace("\n", "")
+                databaseReference?.child("users")?.child(idUser)?.child("entradaDinheiro")?.setValue(saldoTotal)
+            }
+            if (this.equals("gastos")){
+                saldoTotal = despesaTotal - movimentacoes.valor!!
+                val databaseReference = FireBaseSetting.getFirebaseDataBase()
+                val auth = FireBaseSetting.getFirebaseAuth()
+                val email = auth?.currentUser?.email.toString()
+                val idUser = Base64Converter.codificarBase(email).replace("\n", "")
+                databaseReference?.child("users")?.child(idUser)?.child("despesas")?.setValue(saldoTotal)
+            }
+        }
+    }
+
+    fun listarTransacoes() {
         val databaseReference = FireBaseSetting.getFirebaseDataBase()
         val auth = FireBaseSetting.getFirebaseAuth()
         val email = auth?.currentUser?.email.toString()
         val idUser = Base64Converter.codificarBase(email).replace("\n", "")
         listOfMovimentacoes.clear()
-        databaseReference?.child("movimentacoes")?.child(idUser)?.child(mesano)
-            ?.addValueEventListener(object : ValueEventListener {
+
+        databaseReference?.child("movimentacoes")?.child(idUser)?.child(mesano)?.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (item in snapshot.children) {
                         val transacoes: Movimentacoes = item.getValue(Movimentacoes::class.java)!!
-                        movimentacoes.id = item.key
+                        transacoes.id = item.key
                         listOfMovimentacoes.add(transacoes)
-                        adapter.notifyDataSetChanged()
+                        myAdapter.notifyDataSetChanged()
 
                     }
                 }
@@ -231,10 +254,11 @@ class InicialActivity : AppCompatActivity() {
                     val numberFormat = DecimalFormat("00.00")
 
                     nomeInicial.text = "Olá, ${user?.nome?.split(" ")?.get(0)}"
-
-                    saldoTotal = user?.entradaDinheiro!! - user.despesas
+                    receitaTotal = user?.entradaDinheiro!!
+                    despesaTotal = user.despesas
+                    saldoTotal = receitaTotal - despesaTotal
                     val saldoTotalString = numberFormat.format(saldoTotal)
-                    saldoInicial.text = "R$ ${user.entradaDinheiro - user.despesas}"
+                    saldoInicial.text = "R$ $saldoTotalString"
                     progressBar()
                 }
             })
@@ -243,8 +267,8 @@ class InicialActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         recuperarDadosUser()
-        recuperarTransacoes()
-
+        listarTransacoes()
+        Toast.makeText(applicationContext, "ON START", Toast.LENGTH_SHORT).show()
     }
 
     override fun onStop() {

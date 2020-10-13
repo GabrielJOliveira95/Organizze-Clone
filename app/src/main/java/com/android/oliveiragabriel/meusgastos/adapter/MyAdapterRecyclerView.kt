@@ -13,7 +13,7 @@ import com.android.oliveiragabriel.meusgastos.R
 import com.android.oliveiragabriel.meusgastos.model.Movimentacoes
 import java.text.DecimalFormat
 
-class AdapterRecyclerView(mutableList: MutableList<Movimentacoes>, var context: Context) : RecyclerView.Adapter<ViewHolder>() {
+class MyAdapterRecyclerView(mutableList: MutableList<Movimentacoes>, var context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
 
     var lisfOfMovimentacoes = mutableListOf<Movimentacoes>()
